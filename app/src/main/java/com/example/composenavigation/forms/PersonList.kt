@@ -42,7 +42,7 @@ fun PersonList(navController: NavController, persons: MutableList<Persons>, modi
                     navController.navigate(route = Screens.PersonList.name)
                 })
             {
-                Text(text="Delete")
+                Text(text="Delete person")
             }
         }
     }
