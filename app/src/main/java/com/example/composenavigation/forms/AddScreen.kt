@@ -24,6 +24,7 @@ import com.example.composenavigation.Persons
 fun AddScreen(navController: NavController,  persons: MutableList<Persons>, modifier: Modifier = Modifier) {
     var personName by rememberSaveable { mutableStateOf("") }
     var personAge by remember { mutableStateOf(0) }
+    var personAgeString = remember { mutableStateOf("0") }
 
     Column (modifier = Modifier
         .fillMaxWidth()
@@ -45,16 +46,18 @@ fun AddScreen(navController: NavController,  persons: MutableList<Persons>, modi
         Row() {
             TextField(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                value = personAge.toString(),
+                value = personAgeString.value,
                 onValueChange = {
-                    if (!it.isEmpty())
-                        personAge = it.toInt()
+                    if (!it.isEmpty()) {
+                        personAgeString.value = it
+                    }
                 },
                 label = { Text("person age:") }
             )
         }
         Row() {
             Button(onClick = {
+                personAge = personAgeString.value.toInt()
                 persons += Persons(personName,personAge)
                 navController.navigate(route = Screens.PersonList.name)
 
