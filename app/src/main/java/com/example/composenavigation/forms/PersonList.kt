@@ -38,7 +38,7 @@ fun PersonList(navController: NavController, persons: MutableList<Persons>, modi
 @Composable
 fun Zawartosc(navController: NavController, persons: MutableList<Persons>, modifier: Modifier) {
     var index by remember { mutableStateOf(0) }
-    LazyColumn(modifier = Modifier
+    LazyColumn(modifier = modifier
         .fillMaxWidth()
         .padding(8.dp)) {
         item {
