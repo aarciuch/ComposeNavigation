@@ -1,4 +1,5 @@
 enum class Screens() {
     PersonList,
-    AddScreen
+    AddScreen,
+    Param
 }

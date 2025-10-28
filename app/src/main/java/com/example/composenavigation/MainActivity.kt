@@ -3,22 +3,34 @@ package com.example.composenavigation
 import AddScreen
 import PersonList
 import Screens
+import android.R.attr.name
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.composenavigation.forms.Param
 import com.example.composenavigation.ui.theme.ComposeNavigationTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,31 +46,34 @@ class MainActivity : ComponentActivity() {
         //enableEdgeToEdge()
         setContent {
             ComposeNavigationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    RootNav(
-                        modifier = Modifier.padding(innerPadding),
-                        navController = rememberNavController(),
-                        persons = personList
-                    )
-                }
+                RootNav(
+                    persons = personList
+                )
             }
         }
     }
 }
 
+
 @Composable
-fun RootNav(modifier: Modifier,
-            navController: NavHostController,
-            startDestination : String = Screens.PersonList.name,
-            persons: MutableList<Persons>
-            ) {
+fun RootNav(persons: MutableList<Persons>) {
+    val navController = rememberNavController()
     NavHost(navController = navController,
-        startDestination = startDestination) {
-        composable(route = Screens.PersonList.name ) {
-            PersonList(navController,persons)
+            startDestination = Screens.PersonList.name
+    ) {
+        composable(Screens.PersonList.name) {
+            PersonList(navController, persons)
         }
-        composable(route = Screens.AddScreen.name) {
+        composable(Screens.AddScreen.name) {
             AddScreen(navController, persons)
+        }
+        composable("${Screens.Param.name}/{param1}/{param2}",
+                    arguments = listOf(navArgument("param1") {type = NavType.StringType},
+                        navArgument(name = "param2") {type = NavType.IntType})
+        ) {
+            val arg1 = it.arguments?.getString("param1") ?: ""
+            val arg2 = it.arguments?.getInt("param2") ?: 0
+            Param(arg1, arg2)
         }
     }
 }
